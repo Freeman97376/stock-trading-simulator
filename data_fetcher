@@ -1,0 +1,71 @@
+import yfinance as yf
+#import alphavantage as alp
+#import askshare as ak 
+import pandas as pd
+import os
+class DataFetcher:
+
+    def __init__(self,storage_dir = "data_cache"):
+
+
+        self.storage_dir = storage_dir
+        if not os.path.exists(self.storage_dir):
+            os.makedirs(self.storage_dir)
+            print(f"created data cache: {self.storage_dir}")
+
+
+    def get_file_path(self, stockcode, period, interval):
+
+
+        filename = f"{stockcode}_{period}_{interval}.csv"
+        return os.path.join(self.storage_dir, filename)
+    
+    def fetch_stock(self,stockcode,
+                    apitype ="yf",
+                    period = "1mo",
+                    interval = "1d",
+                    start = None, End =None):
+        
+
+        file_path = self.get_file_path(stockcode, period, interval)  # check if the data exist locally, to be updated with better name format
+        if os.path.exists (file_path):
+            print(f"local cache found, reading{file_path}")
+            df = pd.read_csv(file_path, index_col=0, parse_dates=True)
+        try:
+            if apitype == "yf":
+                ticker = yf.Ticker(stockcode)
+                if start and end:
+                    df = ticker.history(start=start, end=end, interval=interval)
+                else:
+                    df = ticker.history(period=period, interval=interval)
+                
+
+
+            #space for other apis
+
+            
+
+
+            if not df.empty:
+                    df.to_csv(file_path)
+                    print(f"save data to : {file_path}")
+            else:
+                print("empty file")
+
+        except Exception as e:
+            print(f"error {e}")
+
+        return df
+    
+if __name__  == "__main__":
+    print("test1")
+    fetcher = DataFetcher()
+
+
+    data1 = fetcher.fetch_stock("MU", period="1mo")
+    print(data1.head())
+
+        
+    print("test2")
+    data2 = fetcher.fetch_stock("MU", period="1mo")
+            
