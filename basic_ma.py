@@ -23,7 +23,7 @@ def main():
 
     ticker = yf.Ticker("AAPL")
     data = ticker.history(
-        period="1y",      
+        period="1y",
         interval="1h"
     )
     # print(data.shape)
@@ -62,8 +62,6 @@ def main():
     plt.xlabel("Time (hours)")
     plt.ylabel("Capital ($)")
     plt.show()
-    
-
 
 if __name__ == "__main__":
     main()
