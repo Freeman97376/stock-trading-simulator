@@ -1,5 +1,6 @@
 # finance data apis
 yfinance
-Alpha Vantage
+AlphaVantage
 AkShare #chinese stocks
 CCXT
+
